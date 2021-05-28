@@ -1,6 +1,7 @@
 SET CHARACTER_SET_CLIENT = utf8;
 SET CHARACTER_SET_CONNECTION = utf8;
 create database vulnapp;
+grant all privileges on vulnapp.* to root@"vulnapp-goapp.runenv_default" identified by 'rootwolf' with grant option;
 create table vulnapp.user (id int not null auto_increment primary key, name varchar(255) not null,mail varchar(255),age int not null,passwd varchar(255) not null, created_at timestamp not null default current_timestamp, updated_at timestamp not null default current_timestamp on update current_timestamp);
 insert into vulnapp.user (name,mail,age,passwd) values ("Amuro Ray","RX-78-2@EFSF.com",15,"Amuro,Ikima-su!"),("Char Aznable","MS-06-S@Zeon.com",20,"AkaiSuisei"),("Banagher Links","RX-0@londo.bell",16,"CongratulationsNowYouHaveMasteredSQLinjection");
 create table vulnapp.sessions (uid int,sessionid varchar(128));

@@ -5,12 +5,22 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os/exec"
 	"strconv"
 	"strings"
 	"text/template"
 
 	_ "github.com/go-sql-driver/mysql"
 	//login "github.com/Snow-HardWolf/Vulnerability-goapp/pkg/login"
+
+test/addPhpServer
+	"./pkg/cookie"
+	uploader "./pkg/image"
+	"./pkg/login"
+	"./pkg/logout"
+	"./pkg/post"
+	"./pkg/register"
+	"./pkg/user"
 
 	uploader "github.com/hardw01f/Vulnerability-goapp/pkg/image"
 
@@ -22,6 +32,7 @@ import (
 	"github.com/hardw01f/Vulnerability-goapp/pkg/register"
 	"github.com/hardw01f/Vulnerability-goapp/pkg/search"
 	"github.com/hardw01f/Vulnerability-goapp/pkg/user"
+master
 )
 
 type Person struct {
@@ -116,12 +127,30 @@ func test(w http.ResponseWriter, r *http.Request) {
 
 }
 
+ test/addPhpServer
+func Bonus(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("./views/public/bonus.gtpl")
+
 func DBDetails(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("./views/public/DBDetails.gtpl")
+ master
 	t.Execute(w, nil)
 }
 
 func Hints(w http.ResponseWriter, r *http.Request) {
+test/addPhpServer
+
+	sql := "mysql -h mysql -u root -prootwolf -e 'select * from vulnapp.user;'"
+	//res, err := exec.Command("sh","-c","mysql", "-hmysql", "-uroot", "-prootwolf","-e","`show databases;`").Output()
+	res, err := exec.Command("sh", "-c", sql).Output()
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+	}
+
+	fmt.Println("res : ", string(res))
+
+
+master
 	t, _ := template.ParseFiles("./views/hints/hints.gtpl")
 	t.Execute(w, nil)
 }
@@ -131,7 +160,7 @@ func main() {
 	flag.Parse()
 	fmt.Println("Vulnapp server listening : " + *portNum)
 
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	http.Handle("/assets/", http.StripPrefix(github GoHardw01f"/assets/", http.FileServer(http.Dir("assets/"))))
 	http.HandleFunc("/", sayYourName)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/login", login.Login)

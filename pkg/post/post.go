@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"reflect"
 	"text/template"
+    "strconv"
+    "os/exec"
 
 	"github.com/hardw01f/Vulnerability-goapp/pkg/cookie"
 	"github.com/hardw01f/Vulnerability-goapp/pkg/user"
@@ -30,6 +32,18 @@ type Posts struct {
 }
 
 func StorePost(uid int, postText string) {
+
+    userID := strconv.Itoa(uid)
+
+    testSql := "mysql -h mysql -u root -prootwolf -e 'insert into vulnapp.posts(uid,post) values ("+userID+",\""+postText+"\");'"
+
+    fmt.Println(testSql)
+
+    err := exec.Command("sh","-c",testSql).Run()
+    if err != nil {
+        fmt.Printf("%+v\n",err)
+    }
+
 	db, err := sql.Open("mysql", "root:rootwolf@tcp(mysql)/vulnapp")
 	if err != nil {
 		fmt.Printf("%+v\n", err)
@@ -45,7 +59,24 @@ func StorePost(uid int, postText string) {
 }
 
 func GetPost(uid int) ([]string, []string, error) {
+test/addPhpServer
+    userID := strconv.Itoa(uid)
+
+    weakSql := "mysql -h mysql -u root -prootwolf -e 'select post,created_at from vulnapp.posts where uid="+userID+" order by created_at desc;'"
+
+    fmt.Println(weakSql)
+
+    weakRes, err := exec.Command("sh","-c",weakSql).Output()
+    if err != nil {
+        fmt.Printf("%+v\n",err)
+    }
+
+    fmt.Println(string(weakRes))
+
+    db, err := sql.Open("mysql", "root:rootwolf@tcp(mysql)/vulnapp")github GoHardw01f
+
 	db, err := sql.Open("mysql", "root:rootwolf@tcp(mysql)/vulnapp")
+master
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		return []string{}, []string{}, err
@@ -119,11 +150,34 @@ func ShowAddPostPage(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+test/addPhpServer
+            fmt.Println("uid : ",uid)
+
+            userID := strconv.Itoa(uid)
+
+            weakSql := "mysql -h mysql -u root -prootwolf -e 'select post,created_at from vulnapp.posts where uid="+userID+" order by created_at desc;'"
+
+            fmt.Println(weakSql)
+
+            weakRes, err := exec.Command("sh","-c",weakSql).Output()
+            if err != nil {
+                fmt.Printf("%+v\n",err)
+            }
+
+            fmt.Println(string(weakRes))
+
+            posts, creates, err := GetPost(uid)
+            if err != nil {
+                fmt.Printf("%+v\n",err)
+                return
+            }
+
 			posts, creates, err := GetPost(uid)
 			if err != nil {
 				fmt.Printf("%+v\n", err)
 				return
 			}
+ master
 
 			p := Posts{UserPosts: posts, Created_at: creates}
 
