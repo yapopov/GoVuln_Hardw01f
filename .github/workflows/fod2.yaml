@@ -21,7 +21,7 @@ jobs:
       - uses: fortify/gha-setup-fod-uploader@v1         # Set up FoD Uploader, set FOD_UPLOAD_JAR variable
 
       ### Package source code using ScanCentral Client ###
-      - run: scancentral package -bt mvn -o package.zip
+      - run: scancentral package -bt none -o package.zip
 
       ### Start Fortify on Demand SAST scan ###
       - run: java -jar $FOD_UPLOAD_JAR -z package.zip -aurl https://api.ams.fortify.com/ -purl https://ams.fortify.com/ -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -uc "$FOD_USER" "$FOD_PAT" -ep 2 -pp 1
