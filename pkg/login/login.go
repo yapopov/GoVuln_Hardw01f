@@ -1,13 +1,14 @@
 package login
 
 import (
-	"../cookie"
 	"database/sql"
 	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/hardw01f/Vulnerability-goapp/pkg/cookie"
 )
 
 type Person struct {
@@ -99,9 +100,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method ", r.Method)
 
 	if r.Method == "GET" {
-		t, _ := template.ParseFiles("./views/public/login.gtpl")
-		t.Execute(w, nil)
-	} else {
+		if cookie.CheckSessionID(r) {
+			http.Redirect(w, r, "/top", 302)
+		} else {
+			t, _ := template.ParseFiles("./views/public/login.gtpl")
+			t.Execute(w, nil)
+		}
+	} else if r.Method == "POST" {
 
 		r.ParseForm()
 		if isZeroString(r.FormValue("mail")) && isZeroString(r.FormValue("passwd")) {
@@ -147,5 +152,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("username or passwd are empty")
 			outErrorPage(w)
 		}
+	} else {
+		http.NotFound(w, nil)
 	}
 }

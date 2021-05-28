@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	//login "github.com/Snow-HardWolf/Vulnerability-goapp/pkg/login"
 
+test/addPhpServer
 	"./pkg/cookie"
 	uploader "./pkg/image"
 	"./pkg/login"
@@ -19,6 +21,18 @@ import (
 	"./pkg/post"
 	"./pkg/register"
 	"./pkg/user"
+
+	uploader "github.com/hardw01f/Vulnerability-goapp/pkg/image"
+
+	"github.com/hardw01f/Vulnerability-goapp/pkg/admin"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/cookie"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/login"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/logout"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/post"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/register"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/search"
+	"github.com/hardw01f/Vulnerability-goapp/pkg/user"
+master
 )
 
 type Person struct {
@@ -68,7 +82,13 @@ func showUserTopPage(w http.ResponseWriter, r *http.Request) {
 					Value: uid,
 				}
 
+				deleAdminID := &http.Cookie{
+					Name:  "adminSID",
+					Value: "",
+				}
+
 				http.SetCookie(w, cookieUserID)
+				http.SetCookie(w, deleAdminID)
 				p := Person{UserName: userName}
 				t, _ := template.ParseFiles("./views/public/top.gtpl")
 				t.Execute(w, p)
@@ -102,14 +122,23 @@ func test(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("checkCookie false")
 	}
 
+	t, _ := template.ParseFiles("./views/test.gtpl")
+	t.Execute(w, nil)
+
 }
 
+ test/addPhpServer
 func Bonus(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("./views/public/bonus.gtpl")
+
+func DBDetails(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("./views/public/DBDetails.gtpl")
+ master
 	t.Execute(w, nil)
 }
 
 func Hints(w http.ResponseWriter, r *http.Request) {
+test/addPhpServer
 
 	sql := "mysql -h mysql -u root -prootwolf -e 'select * from vulnapp.user;'"
 	//res, err := exec.Command("sh","-c","mysql", "-hmysql", "-uroot", "-prootwolf","-e","`show databases;`").Output()
@@ -120,12 +149,18 @@ func Hints(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("res : ", string(res))
 
+
+master
 	t, _ := template.ParseFiles("./views/hints/hints.gtpl")
 	t.Execute(w, nil)
 }
 
 func main() {
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	var portNum = flag.String("p", "80", "Specify application server listening port")
+	flag.Parse()
+	fmt.Println("Vulnapp server listening : " + *portNum)
+
+	http.Handle("/assets/", http.StripPrefix(github GoHardw01f"/assets/", http.FileServer(http.Dir("assets/"))))
 	http.HandleFunc("/", sayYourName)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/login", login.Login)
@@ -142,9 +177,13 @@ func main() {
 	http.HandleFunc("/profile/edit/upload", uploader.UploadImage)
 	http.HandleFunc("/post", post.ShowAddPostPage)
 	http.HandleFunc("/timeline", post.ShowTimeline)
+	http.HandleFunc("/timeline/searchpost", search.SearchPosts)
 	http.HandleFunc("/hints", Hints)
-	http.HandleFunc("/bonus", Bonus)
-	err := http.ListenAndServe(":9090", nil)
+	http.HandleFunc("/db", DBDetails)
+	http.HandleFunc("/adminlogin", admin.ShowAdminLogIn)
+	http.HandleFunc("/adminconfirm", admin.Confirm)
+	http.HandleFunc("/adminusers", admin.ShowAdminPage)
+	err := http.ListenAndServe(":"+*portNum, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

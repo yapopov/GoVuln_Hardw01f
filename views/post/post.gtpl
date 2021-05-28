@@ -1,17 +1,25 @@
-<html>
+<!doctype html>
+<html lang="ja">
+
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <ul id="nav">
   <li><a href="/top">Home</a></li>
   <li><a href="/profile">Profile</a></li>
   <li><a href="/timeline">TimeLine</a></li>
   <li><a href="/post">Post</a></li>
   <li><a href="/hints">Hints</a></li>
-  <li><a href="/bonus">Bonus</a></li>
+  <li><a href="/db">DB</a></li>
   <li><a href="/logout">Logout</a></li>
 <ul>
 </head>
 <div id="header_title">
-<h1>New Post</h1>
+<p class="display-1 text-center">New Post</p>
 </div>
 
 </nav>
@@ -23,7 +31,8 @@
     <div class="box11">
     {{range $i, $v := .UserPosts}}
     <div class="box22">
-    <h2>{{.}}</h2> <br><h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;{{index $.Created_at $i}}</h3>
+    <h2>{{.}}</h2> <br>
+    <h3>{{index $.Created_at $i}}</h3>
     <br>
     </div>
     {{end}}
