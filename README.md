@@ -1,8 +1,6 @@
 refactor/LocalAndDocument
 Vulnerability-goapp
 ====
-
-
 Overview
 
 This Web application was build for learning Web application vulnerability (ex. SQL injection, XSS, CSRF)
